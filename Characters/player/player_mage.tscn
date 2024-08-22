@@ -1,0 +1,167 @@
+[gd_scene load_steps=19 format=3 uid="uid://crflcl44bkds8"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_6ttfn"]
+[ext_resource type="Resource" uid="uid://dx6t3itntwrus" path="res://Characters/player/MovementStates/run.tres" id="2_2yvrg"]
+[ext_resource type="Resource" uid="uid://d14oxrdl6fwny" path="res://Characters/player/MovementStates/sprint.tres" id="3_okgoi"]
+[ext_resource type="Resource" uid="uid://bkccbn0jjmmgx" path="res://Characters/player/MovementStates/stand.tres" id="4_ryclq"]
+[ext_resource type="Resource" uid="uid://bwtxxpwqp27f8" path="res://Characters/player/MovementStates/walk.tres" id="5_os5ts"]
+[ext_resource type="PackedScene" uid="uid://k0tydkrylcbk" path="res://Characters/player/player_mesh.tscn" id="6_84v7q"]
+[ext_resource type="Script" path="res://Characters/player/CameraController.gd" id="7_oo6ml"]
+[ext_resource type="Script" path="res://Characters/player/MovementStates/movement_controller.gd" id="8_6baru"]
+[ext_resource type="Script" path="res://Characters/player/animation_controller.gd" id="9_hxlwn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uauxp"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1dhet"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lx4es"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d18m3"]
+animation = &"Walking_A"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gi4nu"]
+animation = &"Running_B"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_flye7"]
+animation = &"Running_B"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_jf8vm"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_lx4es")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_d18m3")
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_gi4nu")
+blend_point_2/pos = 2.0
+blend_point_3/node = SubResource("AnimationNodeAnimation_flye7")
+blend_point_3/pos = 3.0
+min_space = 0.0
+max_space = 3.0
+snap = 1.0
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_neupn"]
+nodes/movement_anim_speed/node = SubResource("AnimationNodeTimeScale_1dhet")
+nodes/movement_anim_speed/position = Vector2(-23, 96)
+nodes/movement_blend/node = SubResource("AnimationNodeBlendSpace1D_jf8vm")
+nodes/movement_blend/position = Vector2(-406, 43)
+node_connections = [&"movement_anim_speed", 0, &"movement_blend", &"output", 0, &"movement_anim_speed"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_a8mhg"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("MeshRoot:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.81909, 0)
+script = ExtResource("1_6ttfn")
+movement_states = {
+"run": ExtResource("2_2yvrg"),
+"sprint": ExtResource("3_okgoi"),
+"stand": ExtResource("4_ryclq"),
+"walk": ExtResource("5_os5ts")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_uauxp")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="PlayerMesh" parent="MeshRoot" instance=ExtResource("6_84v7q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.924622, 0)
+
+[node name="Skeleton3D" parent="MeshRoot/PlayerMesh/Rig" index="0"]
+bones/1/position = Vector3(0, 0.374522, 0)
+bones/1/rotation = Quaternion(-1.11123e-10, 0.0431578, 2.57241e-09, 0.999068)
+bones/4/rotation = Quaternion(-0.553783, -0.0570274, -0.637468, 0.532641)
+bones/5/rotation = Quaternion(1.28132e-08, -5.67169e-08, -0.514427, 0.857534)
+bones/7/rotation = Quaternion(-0.321868, -0.336023, 0.150486, 0.872263)
+bones/8/rotation = Quaternion(0.000652673, 0.000652662, -0.704707, 0.709498)
+bones/11/rotation = Quaternion(-0.612211, 0.0774153, 0.612918, 0.493494)
+bones/12/rotation = Quaternion(1.53686e-08, 5.91815e-08, 0.536843, 0.843683)
+bones/14/rotation = Quaternion(-0.320759, 0.312175, -0.232591, 0.86346)
+bones/15/rotation = Quaternion(0.00208623, 0.00245726, 0.704938, 0.709262)
+bones/18/rotation = Quaternion(-5.80608e-11, -0.0313417, -1.88012e-09, 0.999509)
+bones/21/rotation = Quaternion(0.990748, 0.0833585, 0.0778615, 0.0735393)
+bones/22/rotation = Quaternion(0.3593, 6.43315e-08, -2.53932e-07, 0.933222)
+bones/23/rotation = Quaternion(-0.602771, -0.202907, 0.0702838, 0.768476)
+bones/25/rotation = Quaternion(0.99286, -0.0325277, 0.0301473, 0.110732)
+bones/26/rotation = Quaternion(0.407334, -6.01089e-08, 2.83681e-07, 0.913279)
+bones/27/rotation = Quaternion(-0.630292, 0.113047, -0.0203312, 0.767814)
+bones/28/rotation = Quaternion(3.04791e-08, 0.920355, -0.391084, -6.94849e-08)
+bones/29/rotation = Quaternion(0.707107, -2.29302e-07, -4.60552e-08, 0.707107)
+bones/30/position = Vector3(0.202182, 0.0259903, 0.205181)
+bones/30/rotation = Quaternion(-0.707107, -7.05285e-08, -7.05285e-08, 0.707107)
+bones/31/rotation = Quaternion(9.65792e-09, 1.77955e-09, 0.985719, -0.168398)
+bones/32/rotation = Quaternion(-1.04035e-07, 0.391084, 0.920355, -2.9526e-08)
+bones/34/rotation = Quaternion(1, -3.10863e-15, 1.94707e-07, -6.91739e-22)
+bones/36/rotation = Quaternion(0.707107, -3.82385e-08, 1.45009e-07, 0.707107)
+bones/37/rotation = Quaternion(-0.707107, -7.05285e-08, -7.05285e-08, 0.707107)
+bones/38/rotation = Quaternion(-5.83589e-09, 6.43837e-10, 0.994809, 0.101756)
+bones/39/rotation = Quaternion(-1.04035e-07, 0.391084, 0.920355, -2.95261e-08)
+bones/44/position = Vector3(0.520841, 0.779084, -0.0576374)
+bones/44/rotation = Quaternion(0.794627, -1.11759e-07, 0.607098, -5.96046e-08)
+bones/46/position = Vector3(-0.510844, 0.779084, 0.0597369)
+bones/46/rotation = Quaternion(-0.758253, -1.52737e-07, 0.651961, -1.11759e-08)
+
+[node name="Spellbook" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="0"]
+transform = Transform3D(4.17874e-07, 0.964832, 0.262863, -0.999974, 0.00184674, -0.00677543, -0.00702284, -0.262857, 0.964809, 0.577315, 0.625972, 0.23904)
+
+[node name="Spellbook_open" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="1"]
+transform = Transform3D(4.17874e-07, 0.964832, 0.262863, -0.999974, 0.00184674, -0.00677543, -0.00702284, -0.262857, 0.964809, 0.545679, 0.626788, 0.122924)
+
+[node name="1H_Wand" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="2"]
+transform = Transform3D(-0.00145428, -0.156239, 0.987717, 0.99998, -0.00611671, 0.000504368, 0.00596307, 0.9877, 0.156246, -0.490495, 0.632318, 0.107772)
+
+[node name="2H_Staff" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="3"]
+transform = Transform3D(-0.00145428, -0.156239, 0.987717, 0.99998, -0.00611671, 0.000504368, 0.00596307, 0.9877, 0.156246, -0.490495, 0.632318, 0.107772)
+
+[node name="Mage_Hat" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="4"]
+transform = Transform3D(0.99972, -0.00612019, 0.0228409, 1.39341e-09, 0.965926, 0.258819, -0.0236466, -0.258747, 0.965656, -7.48419e-09, 1.75296, -1.02479e-07)
+
+[node name="Mage_Cape" parent="MeshRoot/PlayerMesh/Rig/Skeleton3D" index="5"]
+transform = Transform3D(0.996275, -5.14962e-09, 0.0862353, 5.13043e-09, 1, 4.44077e-10, -0.0862353, 1.8939e-15, 0.996275, -1.2997e-08, 1.18473, -1.01951e-07)
+
+[node name="AnimationTree" type="AnimationTree" parent="MeshRoot"]
+root_node = NodePath("../PlayerMesh")
+tree_root = SubResource("AnimationNodeBlendTree_neupn")
+anim_player = NodePath("../PlayerMesh/AnimationPlayer")
+parameters/movement_anim_speed/scale = 1.0
+parameters/movement_blend/blend_position = -0.00610998
+
+[node name="CamRoot" type="Node3D" parent="."]
+script = ExtResource("7_oo6ml")
+
+[node name="CamYaw" type="Node3D" parent="CamRoot"]
+
+[node name="CamPitch" type="Node3D" parent="CamRoot/CamYaw"]
+
+[node name="Camera3D" type="Camera3D" parent="CamRoot/CamYaw/CamPitch"]
+transform = Transform3D(-1, 1.77636e-15, -8.74228e-08, -1.56674e-08, 0.98381, 0.179214, 8.60074e-08, 0.179214, -0.98381, -0.450332, 4.22972, -5.52592)
+
+[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("player", "mesh_root")]
+script = ExtResource("8_6baru")
+player = NodePath("..")
+mesh_root = NodePath("../MeshRoot")
+
+[node name="AnimationController" type="Node" parent="." node_paths=PackedStringArray("animation_tree", "player")]
+script = ExtResource("9_hxlwn")
+animation_tree = NodePath("../MeshRoot/AnimationTree")
+player = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_a8mhg")
+
+[connection signal="set_movement_direction" from="." to="MovementController" method="_on_set_movement_direction"]
+[connection signal="set_movement_state" from="." to="." method="_on_set_movement_state"]
+[connection signal="set_movement_state" from="." to="CamRoot" method="_on_set_movement_state"]
+[connection signal="set_movement_state" from="." to="MovementController" method="_on_set_movement_state"]
+[connection signal="set_movement_state" from="." to="AnimationController" method="_on_set_movement_state"]
+[connection signal="set_cam_rotation" from="CamRoot" to="MovementController" method="_on_set_cam_rotation"]
+
+[editable path="MeshRoot/PlayerMesh"]

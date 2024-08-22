@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MovementState" load_steps=2 format=3 uid="uid://bwtxxpwqp27f8"]
+
+[ext_resource type="Script" path="res://Characters/player/movement_state.gd" id="1_bn2wy"]
+
+[resource]
+script = ExtResource("1_bn2wy")
+id = 1
+movement_speed = 3.0
+acceleration = 7.0
+camera_fov = 72.5
+animation_speed = 1.15

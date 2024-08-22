@@ -1,0 +1,126 @@
+[gd_scene load_steps=4 format=3 uid="uid://bl7cmg852s8rv"]
+
+[ext_resource type="PackedScene" uid="uid://qkr0ply0dr6l" path="res://gltf/characters/Mage.glb" id="1_xg5si"]
+
+[sub_resource type="GDScript" id="GDScript_3sp0e"]
+script/source = "extends CharacterBody3D
+
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
+
+
+func _physics_process(delta):
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var input_dir = Input.get_vector(\"left\", \"right\", \"forward\", \"backward\")
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wp66x"]
+size = Vector3(1, 1, 0.871582)
+
+[node name="Player" instance=ExtResource("1_xg5si")]
+script = SubResource("GDScript_3sp0e")
+
+[node name="Rig" parent="." index="0"]
+transform = Transform3D(-0.999997, 0, 0.00240857, 0, 1, 0, -0.00240857, 0, -0.999997, 0.00636649, 0, -0.0181751)
+
+[node name="Skeleton3D" parent="Rig" index="0"]
+bones/4/rotation = Quaternion(-0.514121, -0.485468, -0.485468, 0.514122)
+bones/4/scale = Vector3(0.999999, 0.999999, 1)
+bones/5/rotation = Quaternion(1.64805e-09, -5.95036e-08, -0.0552855, 0.998471)
+bones/6/rotation = Quaternion(-9.73784e-11, -2.98437e-10, 0.0266581, 0.999645)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/rotation = Quaternion(1.20018e-09, 1.33102e-07, -5.4552e-06, 1)
+bones/8/rotation = Quaternion(1.60975e-09, 1.60975e-09, -0.707107, 0.707107)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/rotation = Quaternion(-8.95373e-08, 0.707107, 0.707107, -9.81383e-08)
+bones/10/rotation = Quaternion(-8.95373e-08, 0.707107, 0.707107, -9.81383e-08)
+bones/11/rotation = Quaternion(-0.514121, 0.485468, 0.485468, 0.514122)
+bones/11/scale = Vector3(0.999999, 0.999999, 1)
+bones/12/rotation = Quaternion(1.64805e-09, 5.95036e-08, 0.0552855, 0.998471)
+bones/13/rotation = Quaternion(-9.73784e-11, 2.98437e-10, -0.0266581, 0.999645)
+bones/13/scale = Vector3(1, 1, 1)
+bones/15/rotation = Quaternion(1.60973e-09, -1.60973e-09, 0.707107, 0.707107)
+bones/15/scale = Vector3(1, 1, 1)
+bones/16/rotation = Quaternion(1.32707e-07, 1, -4.37114e-08, -2.27651e-09)
+bones/17/rotation = Quaternion(1.32707e-07, 1, -4.37114e-08, -2.27651e-09)
+bones/19/rotation = Quaternion(-0.130526, -7.04464e-15, -9.27444e-16, 0.991445)
+bones/21/rotation = Quaternion(0.999849, -7.13276e-08, -1.20427e-08, 0.0173732)
+bones/21/scale = Vector3(1, 1, 1)
+bones/22/rotation = Quaternion(0.106225, 6.86528e-08, -7.37699e-08, 0.994342)
+bones/23/rotation = Quaternion(-0.455239, 1.61971e-08, -3.43568e-08, 0.890369)
+bones/24/rotation = Quaternion(-3.04791e-08, 0.920355, -0.391084, 6.94849e-08)
+bones/24/scale = Vector3(1, 1, 1)
+bones/25/rotation = Quaternion(0.999849, 7.42656e-08, -3.17263e-08, 0.0173732)
+bones/25/scale = Vector3(1, 1, 1)
+bones/27/rotation = Quaternion(-0.455239, 1.65982e-07, 2.25094e-09, 0.890369)
+bones/28/rotation = Quaternion(3.04791e-08, 0.920355, -0.391084, -6.94849e-08)
+bones/28/scale = Vector3(1, 1, 1)
+bones/29/rotation = Quaternion(0.707107, -2.29302e-07, -4.60552e-08, 0.707107)
+bones/30/rotation = Quaternion(-0.707107, -7.05285e-08, -7.05285e-08, 0.707107)
+bones/31/rotation = Quaternion(7.10544e-15, -1.38321e-22, 1, -2.33983e-34)
+bones/32/rotation = Quaternion(-1.04035e-07, 0.391084, 0.920355, -2.9526e-08)
+bones/32/scale = Vector3(1, 1, 1)
+bones/33/scale = Vector3(1, 1, 1)
+bones/34/rotation = Quaternion(1, -3.10863e-15, 1.94707e-07, -6.91739e-22)
+bones/36/rotation = Quaternion(0.707107, -3.82385e-08, 1.45009e-07, 0.707107)
+bones/37/rotation = Quaternion(-0.707107, -7.05285e-08, -7.05285e-08, 0.707107)
+bones/38/rotation = Quaternion(7.10544e-15, -1.38321e-22, 1, -2.33983e-34)
+bones/39/rotation = Quaternion(-1.04035e-07, 0.391084, 0.920355, -2.95261e-08)
+bones/39/scale = Vector3(1, 1, 1)
+bones/40/rotation = Quaternion(-0.391084, -6.885e-08, -6.56288e-08, 0.920355)
+bones/40/scale = Vector3(1, 1, 1)
+bones/43/rotation = Quaternion(-0.707107, -7.27951e-08, -7.27951e-08, 0.707107)
+bones/44/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
+bones/45/rotation = Quaternion(-0.707107, -7.27951e-08, -7.27951e-08, 0.707107)
+bones/46/rotation = Quaternion(-0.5, 0.5, 0.5, 0.5)
+
+[node name="Spellbook" parent="Rig/Skeleton3D" index="0"]
+transform = Transform3D(0.999999, -1.00592e-06, -6.27668e-07, 1.03722e-06, 1, -1.18993e-06, 6.46298e-07, 1.2195e-06, 0.999999, 0.883132, 1.04926, 0.265739)
+
+[node name="Spellbook_open" parent="Rig/Skeleton3D" index="1"]
+transform = Transform3D(0.999999, -1.00592e-06, -6.27668e-07, 1.03722e-06, 1, -1.18993e-06, 6.46298e-07, 1.2195e-06, 0.999999, 0.883132, 1.04926, 0.145388)
+
+[node name="1H_Wand" parent="Rig/Skeleton3D" index="2"]
+transform = Transform3D(0.999999, 6.27658e-07, -9.89199e-07, -1.02051e-06, -1.18979e-06, -1, -6.46288e-07, 0.999999, -1.21935e-06, -0.883132, 1.04926, 6.66941e-08)
+
+[node name="2H_Staff" parent="Rig/Skeleton3D" index="3"]
+transform = Transform3D(0.999999, 6.27658e-07, -9.89199e-07, -1.02051e-06, -1.18979e-06, -1, -6.46288e-07, 0.999999, -1.21935e-06, -0.883132, 1.04926, 6.66941e-08)
+
+[node name="Mage_Hat" parent="Rig/Skeleton3D" index="4"]
+transform = Transform3D(1, 1.69407e-21, 8.47033e-22, -2.11758e-21, 0.965926, 0.258819, -8.47033e-22, -0.258819, 0.965926, 0, 1.7841, -1.02333e-07)
+
+[node name="Mage_Cape" parent="Rig/Skeleton3D" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21587, -1.02333e-07)
+
+[node name="AnimationPlayer" parent="." index="1"]
+autoplay = "Idle"
+
+[node name="Camera3D" type="Camera3D" parent="." index="2"]
+transform = Transform3D(0.989543, -0.0144671, 0.14351, -0.00565637, 0.9903, 0.138833, -0.144127, -0.138193, 0.979862, 1.3373, 3.31392, 3.06277)
+fov = 95.9594
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(-0.514399, 0, 0.0013591, 0, 1.37417, 0, -0.00123897, 0, -0.564277, 0.026449, 0.689194, -0.0599666)
+shape = SubResource("BoxShape3D_wp66x")
